@@ -31,14 +31,35 @@
     return self;
 }
 
+- (IBAction)whitColor:(id)sender
+{
+    self.lights = self.lifxNetworkContext.allLightsCollection.lights;
+    
+    if ([self.lights count] > 0) {
+        LFXLight *light = self.lights[0];
+        light.powerState = LFXFuzzyPowerStateOn;
+        
+        LFXHSBKColor *color = [LFXHSBKColor colorWithHue:0 saturation:0.0 brightness:1.0 kelvin:4000];
+        [light setColor:color];
+    }
+}
+
+- (IBAction)yellowColor:(id)sender
+{
+    self.lights = self.lifxNetworkContext.allLightsCollection.lights;
+    
+    if ([self.lights count] > 0) {
+        LFXLight *light = self.lights[0];
+        light.powerState = LFXFuzzyPowerStateOn;
+        
+        LFXHSBKColor *color = [LFXHSBKColor colorWithHue:0 saturation:0.0 brightness:1.0 kelvin:2000];
+        [light setColor:color];
+    }
+}
+
 - (IBAction)test:(id)sender
 {
-    [UIView animateWithDuration:2.0f animations:^{
-        self.test.frame = CGRectMake(0, 0, 20, 20);
-    }];
-    
     [self updateLights];
-    
 }
 
 - (void)viewDidLoad
@@ -51,9 +72,9 @@
     self.preferredContentSize = CGSizeMake(320, 600);
     
     
-    self.test = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 320)];
-    _test.backgroundColor = [UIColor whiteColor];
-    [self.view insertSubview:_test atIndex:0];
+//    self.test = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 320)];
+//    _test.backgroundColor = [UIColor whiteColor];
+//    [self.view insertSubview:_test atIndex:0];
     
     [self.lifxNetworkContext addNetworkContextObserver:self];
     [self.lifxNetworkContext.allLightsCollection addLightCollectionObserver:self];
@@ -101,8 +122,7 @@
 - (void)updateLights
 {
     self.lights = self.lifxNetworkContext.allLightsCollection.lights;
-    
-    
+
     if ([self.lights count] > 0) {
         LFXLight *light = self.lights[0];
         light.powerState = LFXFuzzyPowerStateOn;
@@ -119,7 +139,7 @@
 - (void)networkContextDidConnect:(LFXNetworkContext *)networkContext
 {
     self.test.frame = CGRectMake(0, 0, 320, 320);
-    self.test.backgroundColor = [UIColor yellowColor];
+//    self.test.backgroundColor = [UIColor yellowColor];
     NSLog(@"Network Context Did Connect");
 //    [self updateTitle];
 }
@@ -127,7 +147,7 @@
 - (void)networkContextDidDisconnect:(LFXNetworkContext *)networkContext
 {
     self.test.frame = CGRectMake(0, 0, 320, 320);
-    self.test.backgroundColor = [UIColor grayColor];
+//    self.test.backgroundColor = [UIColor grayColor];
     NSLog(@"Network Context Did Disconnect");
 //    [self updateTitle];
 }
@@ -152,7 +172,7 @@
 - (void)lightCollection:(LFXLightCollection *)lightCollection didAddLight:(LFXLight *)light
 {
     self.test.frame = CGRectMake(0, 0, 320, 320);
-    self.test.backgroundColor = [UIColor greenColor];
+//    self.test.backgroundColor = [UIColor greenColor];
     NSLog(@"Light Collection: %@ Did Add Light: %@", lightCollection, light);
     [light addLightObserver:self];
     [self updateLights];
@@ -161,7 +181,7 @@
 - (void)lightCollection:(LFXLightCollection *)lightCollection didRemoveLight:(LFXLight *)light
 {
     self.test.frame = CGRectMake(0, 0, 320, 320);
-    self.test.backgroundColor = [UIColor redColor];
+//    self.test.backgroundColor = [UIColor redColor];
     NSLog(@"Light Collection: %@ Did Remove Light: %@", lightCollection, light);
     [light removeLightObserver:self];
     [self updateLights];

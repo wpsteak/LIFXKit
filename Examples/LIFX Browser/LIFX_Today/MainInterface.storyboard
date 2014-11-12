@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6250" systemVersion="14B17" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" initialViewController="M4Y-Lb-cyx">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6250" systemVersion="14B23" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" initialViewController="M4Y-Lb-cyx">
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6244"/>
     </dependencies>
@@ -17,12 +17,32 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="MO5-xD-1GZ">
-                                <rect key="frame" x="45" y="96" width="46" height="30"/>
-                                <state key="normal" title="Button">
+                                <rect key="frame" x="30" y="32" width="100" height="30"/>
+                                <state key="normal" title="Random Color">
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
                                 <connections>
                                     <action selector="test:" destination="M4Y-Lb-cyx" eventType="touchUpInside" id="912-6y-rnO"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Qaw-uH-nbj">
+                                <rect key="frame" x="30" y="64" width="81" height="30"/>
+                                <state key="normal" title="White Color">
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="test:" destination="M4Y-Lb-cyx" eventType="touchUpInside" id="Jgy-4P-tY0"/>
+                                    <action selector="whitColor:" destination="M4Y-Lb-cyx" eventType="touchUpInside" id="3kg-wQ-H0C"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="c0q-4W-Jek">
+                                <rect key="frame" x="30" y="94" width="86" height="30"/>
+                                <state key="normal" title="Yellow Color">
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="test:" destination="M4Y-Lb-cyx" eventType="touchUpInside" id="OvI-tD-64M"/>
+                                    <action selector="yellowColor:" destination="M4Y-Lb-cyx" eventType="touchUpInside" id="UQr-B5-O0Y"/>
                                 </connections>
                             </button>
                         </subviews>
