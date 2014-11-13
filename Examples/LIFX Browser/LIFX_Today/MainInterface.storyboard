@@ -22,7 +22,7 @@
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
                                 <connections>
-                                    <action selector="test:" destination="M4Y-Lb-cyx" eventType="touchUpInside" id="912-6y-rnO"/>
+                                    <action selector="randomColor:" destination="M4Y-Lb-cyx" eventType="touchUpInside" id="b4P-Qz-egs"/>
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Qaw-uH-nbj">
@@ -31,7 +31,6 @@
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
                                 <connections>
-                                    <action selector="test:" destination="M4Y-Lb-cyx" eventType="touchUpInside" id="Jgy-4P-tY0"/>
                                     <action selector="whitColor:" destination="M4Y-Lb-cyx" eventType="touchUpInside" id="3kg-wQ-H0C"/>
                                 </connections>
                             </button>
@@ -41,7 +40,6 @@
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
                                 <connections>
-                                    <action selector="test:" destination="M4Y-Lb-cyx" eventType="touchUpInside" id="OvI-tD-64M"/>
                                     <action selector="yellowColor:" destination="M4Y-Lb-cyx" eventType="touchUpInside" id="UQr-B5-O0Y"/>
                                 </connections>
                             </button>

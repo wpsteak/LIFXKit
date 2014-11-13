@@ -24,40 +24,42 @@
 
 - (id)initWithCoder:(NSCoder *)aDecoder
 {
+    NSLog(@"initWithCoder:");
     if (self == [super initWithCoder:aDecoder]) {
-    self.lifxNetworkContext = [LFXClient sharedClient].localNetworkContext;
+        self.lifxNetworkContext = [LFXClient sharedClient].localNetworkContext;
     }
     
     return self;
 }
 
-- (IBAction)whitColor:(id)sender
+- (void)dealloc
+{
+    NSLog(@"dealloc");
+}
+
+- (void)changeLightColorWithLFXHSBKColor:(LFXHSBKColor *)color
 {
     self.lights = self.lifxNetworkContext.allLightsCollection.lights;
-    
     if ([self.lights count] > 0) {
         LFXLight *light = self.lights[0];
         light.powerState = LFXFuzzyPowerStateOn;
-        
-        LFXHSBKColor *color = [LFXHSBKColor colorWithHue:0 saturation:0.0 brightness:1.0 kelvin:4000];
         [light setColor:color];
     }
+}
+
+- (IBAction)whitColor:(id)sender
+{
+    LFXHSBKColor *color = [LFXHSBKColor colorWithHue:0 saturation:0.0 brightness:1.0 kelvin:4000];
+    [self changeLightColorWithLFXHSBKColor:color];
 }
 
 - (IBAction)yellowColor:(id)sender
 {
-    self.lights = self.lifxNetworkContext.allLightsCollection.lights;
-    
-    if ([self.lights count] > 0) {
-        LFXLight *light = self.lights[0];
-        light.powerState = LFXFuzzyPowerStateOn;
-        
-        LFXHSBKColor *color = [LFXHSBKColor colorWithHue:0 saturation:0.0 brightness:1.0 kelvin:2000];
-        [light setColor:color];
-    }
+    LFXHSBKColor *color = [LFXHSBKColor colorWithHue:0 saturation:0.0 brightness:1.0 kelvin:2000];
+    [self changeLightColorWithLFXHSBKColor:color];
 }
 
-- (IBAction)test:(id)sender
+- (IBAction)randomColor:(id)sender
 {
     [self updateLights];
 }
@@ -66,15 +68,9 @@
 {
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
-    
-    
     NSLog(@"viewDidLoad");
-    self.preferredContentSize = CGSizeMake(320, 600);
     
-    
-//    self.test = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 320)];
-//    _test.backgroundColor = [UIColor whiteColor];
-//    [self.view insertSubview:_test atIndex:0];
+    self.preferredContentSize = CGSizeMake(320, 160);
     
     [self.lifxNetworkContext addNetworkContextObserver:self];
     [self.lifxNetworkContext.allLightsCollection addLightCollectionObserver:self];
@@ -84,7 +80,6 @@
 {
     [super viewWillAppear:animated];
     NSLog(@"viewWillAppear");
-
 }
 
 - (void)viewDidAppear:(BOOL)animated
@@ -107,7 +102,6 @@
     // If there's no update required, use NCUpdateResultNoData
     // If there's an update, use NCUpdateResultNewData
 
-    
     NSLog(@"widgetPerformUpdateWithCompletionHandler");
     completionHandler(NCUpdateResultNewData);
 }
@@ -121,58 +115,41 @@
 
 - (void)updateLights
 {
-    self.lights = self.lifxNetworkContext.allLightsCollection.lights;
-
-    if ([self.lights count] > 0) {
-        LFXLight *light = self.lights[0];
-        light.powerState = LFXFuzzyPowerStateOn;
-        
-//        LFXHSBKColor *color = [LFXHSBKColor colorWithHue:100.0 saturation:0.5 brightness:0.5];
-//        light.color = color;
-        LFXHSBKColor *color = [LFXHSBKColor colorWithHue:arc4random()%360 saturation:1.0 brightness:1.0];
-        [light setColor:color];
-    }
+    LFXHSBKColor *color = [LFXHSBKColor colorWithHue:arc4random()%360 saturation:1.0 brightness:1.0];
+    [self changeLightColorWithLFXHSBKColor:color];
 }
 
 #pragma mark - LFXNetworkContextObserver
 
 - (void)networkContextDidConnect:(LFXNetworkContext *)networkContext
 {
-    self.test.frame = CGRectMake(0, 0, 320, 320);
-//    self.test.backgroundColor = [UIColor yellowColor];
     NSLog(@"Network Context Did Connect");
-//    [self updateTitle];
 }
 
 - (void)networkContextDidDisconnect:(LFXNetworkContext *)networkContext
 {
-    self.test.frame = CGRectMake(0, 0, 320, 320);
-//    self.test.backgroundColor = [UIColor grayColor];
     NSLog(@"Network Context Did Disconnect");
 //    [self updateTitle];
 }
 
-- (void)networkContext:(LFXNetworkContext *)networkContext didAddTaggedLightCollection:(LFXTaggedLightCollection *)collection
-{
-    NSLog(@"Network Context Did Add Tagged Light Collection: %@", collection.tag);
-    [collection addLightCollectionObserver:self];
-//    [self updateTags];
-}
-
-- (void)networkContext:(LFXNetworkContext *)networkContext didRemoveTaggedLightCollection:(LFXTaggedLightCollection *)collection
-{
-    NSLog(@"Network Context Did Remove Tagged Light Collection: %@", collection.tag);
-    [collection removeLightCollectionObserver:self];
-//    [self updateTags];
-}
-
+//- (void)networkContext:(LFXNetworkContext *)networkContext didAddTaggedLightCollection:(LFXTaggedLightCollection *)collection
+//{
+//    NSLog(@"Network Context Did Add Tagged Light Collection: %@", collection.tag);
+//    [collection addLightCollectionObserver:self];
+////    [self updateTags];
+//}
+//
+//- (void)networkContext:(LFXNetworkContext *)networkContext didRemoveTaggedLightCollection:(LFXTaggedLightCollection *)collection
+//{
+//    NSLog(@"Network Context Did Remove Tagged Light Collection: %@", collection.tag);
+//    [collection removeLightCollectionObserver:self];
+////    [self updateTags];
+//}
 
 #pragma mark - LFXLightCollectionObserver
 
 - (void)lightCollection:(LFXLightCollection *)lightCollection didAddLight:(LFXLight *)light
 {
-    self.test.frame = CGRectMake(0, 0, 320, 320);
-//    self.test.backgroundColor = [UIColor greenColor];
     NSLog(@"Light Collection: %@ Did Add Light: %@", lightCollection, light);
     [light addLightObserver:self];
     [self updateLights];
@@ -180,8 +157,6 @@
 
 - (void)lightCollection:(LFXLightCollection *)lightCollection didRemoveLight:(LFXLight *)light
 {
-    self.test.frame = CGRectMake(0, 0, 320, 320);
-//    self.test.backgroundColor = [UIColor redColor];
     NSLog(@"Light Collection: %@ Did Remove Light: %@", lightCollection, light);
     [light removeLightObserver:self];
     [self updateLights];
@@ -192,8 +167,6 @@
 - (void)light:(LFXLight *)light didChangeLabel:(NSString *)label
 {
     NSLog(@"Light: %@ Did Change Label: %@", light, label);
-    NSUInteger rowIndex = [self.lights indexOfObject:light];
-//    [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:rowIndex inSection:TableSectionLights]] withRowAnimation:UITableViewRowAnimationFade];
 }
 
 
