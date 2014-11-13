@@ -30,7 +30,6 @@
 	static LFXClient *sharedClient;
 	static dispatch_once_t onceToken;
 	dispatch_once(&onceToken, ^{
-        NSLog(@"[LFXClient new]");
 		sharedClient = [LFXClient new];
 	});
 	return sharedClient;

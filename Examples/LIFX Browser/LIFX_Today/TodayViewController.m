@@ -15,8 +15,7 @@
 @property (nonatomic) LFXNetworkContext *lifxNetworkContext;
 @property (nonatomic) NSArray *lights;
 @property (nonatomic) NSArray *taggedLightCollections;
-
-@property (nonatomic, strong)UIView *test;
+@property (weak, nonatomic) IBOutlet UIView *lightView;
 
 @end
 
@@ -37,32 +36,12 @@
     NSLog(@"dealloc");
 }
 
-- (void)changeLightColorWithLFXHSBKColor:(LFXHSBKColor *)color
+- (void)didReceiveMemoryWarning
 {
-    self.lights = self.lifxNetworkContext.allLightsCollection.lights;
-    if ([self.lights count] > 0) {
-        LFXLight *light = self.lights[0];
-        light.powerState = LFXFuzzyPowerStateOn;
-        [light setColor:color];
-    }
+    [super didReceiveMemoryWarning];
+    // Dispose of any resources that can be recreated.
 }
 
-- (IBAction)whitColor:(id)sender
-{
-    LFXHSBKColor *color = [LFXHSBKColor colorWithHue:0 saturation:0.0 brightness:1.0 kelvin:4000];
-    [self changeLightColorWithLFXHSBKColor:color];
-}
-
-- (IBAction)yellowColor:(id)sender
-{
-    LFXHSBKColor *color = [LFXHSBKColor colorWithHue:0 saturation:0.0 brightness:1.0 kelvin:2000];
-    [self changeLightColorWithLFXHSBKColor:color];
-}
-
-- (IBAction)randomColor:(id)sender
-{
-    [self updateLights];
-}
 
 - (void)viewDidLoad
 {
@@ -86,12 +65,18 @@
 {
     [super viewDidAppear:animated];
     NSLog(@"viewDidAppear");
+    
+    self.lights = self.lifxNetworkContext.allLightsCollection.lights;
+    if ([self.lights count] > 0) {
+        LFXLight *light = self.lights[0];
+        [self.lightView setBackgroundColor:light.color.UIColor];
+    }
 }
 
-- (void)didReceiveMemoryWarning
+- (UIEdgeInsets)widgetMarginInsetsForProposedMarginInsets:(UIEdgeInsets)defaultMarginInsets
 {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
+    NSLog(@"widgetMarginInsetsForProposedMarginInsets");
+    return UIEdgeInsetsZero;
 }
 
 - (void)widgetPerformUpdateWithCompletionHandler:(void (^)(NCUpdateResult))completionHandler
@@ -101,21 +86,45 @@
     // If an error is encountered, use NCUpdateResultFailed
     // If there's no update required, use NCUpdateResultNoData
     // If there's an update, use NCUpdateResultNewData
-
+    
     NSLog(@"widgetPerformUpdateWithCompletionHandler");
     completionHandler(NCUpdateResultNewData);
 }
 
-- (UIEdgeInsets)widgetMarginInsetsForProposedMarginInsets:(UIEdgeInsets)defaultMarginInsets
+#pragma mark -
+
+- (void)changeLightColorWithLFXHSBKColor:(LFXHSBKColor *)color
 {
-    NSLog(@"widgetMarginInsetsForProposedMarginInsets");
-    return UIEdgeInsetsZero;
+    self.lights = self.lifxNetworkContext.allLightsCollection.lights;
+    if ([self.lights count] > 0) {
+        LFXLight *light = self.lights[0];
+        light.powerState = LFXFuzzyPowerStateOn;
+        [light setColor:color];
+        
+        [self.lightView setBackgroundColor:color.UIColor];
+    }
 }
 
+- (IBAction)whitColor:(id)sender
+{
+    LFXHSBKColor *color = [LFXHSBKColor colorWithHue:0 saturation:0.0 brightness:1.0 kelvin:4000];
+    [self changeLightColorWithLFXHSBKColor:color];
+}
+
+- (IBAction)yellowColor:(id)sender
+{
+    LFXHSBKColor *color = [LFXHSBKColor colorWithHue:60 saturation:0.5 brightness:1.0];
+    [self changeLightColorWithLFXHSBKColor:color];
+}
+
+- (IBAction)randomColor:(id)sender
+{
+    [self updateLights];
+}
 
 - (void)updateLights
 {
-    LFXHSBKColor *color = [LFXHSBKColor colorWithHue:arc4random()%360 saturation:1.0 brightness:1.0];
+    LFXHSBKColor *color = [LFXHSBKColor colorWithHue:arc4random()%360 saturation:0.5 brightness:1.0];
     [self changeLightColorWithLFXHSBKColor:color];
 }
 
@@ -132,34 +141,24 @@
 //    [self updateTitle];
 }
 
-//- (void)networkContext:(LFXNetworkContext *)networkContext didAddTaggedLightCollection:(LFXTaggedLightCollection *)collection
-//{
-//    NSLog(@"Network Context Did Add Tagged Light Collection: %@", collection.tag);
-//    [collection addLightCollectionObserver:self];
-////    [self updateTags];
-//}
-//
-//- (void)networkContext:(LFXNetworkContext *)networkContext didRemoveTaggedLightCollection:(LFXTaggedLightCollection *)collection
-//{
-//    NSLog(@"Network Context Did Remove Tagged Light Collection: %@", collection.tag);
-//    [collection removeLightCollectionObserver:self];
-////    [self updateTags];
-//}
-
 #pragma mark - LFXLightCollectionObserver
 
 - (void)lightCollection:(LFXLightCollection *)lightCollection didAddLight:(LFXLight *)light
 {
     NSLog(@"Light Collection: %@ Did Add Light: %@", lightCollection, light);
     [light addLightObserver:self];
-    [self updateLights];
+    
+    [self.lightView setBackgroundColor:light.color.UIColor];
+//    [self updateLights];
 }
 
 - (void)lightCollection:(LFXLightCollection *)lightCollection didRemoveLight:(LFXLight *)light
 {
     NSLog(@"Light Collection: %@ Did Remove Light: %@", lightCollection, light);
     [light removeLightObserver:self];
-    [self updateLights];
+    
+    [self.lightView setBackgroundColor:[UIColor clearColor]];
+//    [self updateLights];
 }
 
 #pragma mark - LFXLightObserver
